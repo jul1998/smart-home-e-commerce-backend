@@ -2,8 +2,10 @@ import os
 from flask_admin import Admin
 from .db import db
 
+
 ### Importar los modelos #####
-from src.modelos import User
+from src.modelos import User, Producto, FavoritoProductos
+
 
 from flask_admin.contrib.sqla import ModelView
 
