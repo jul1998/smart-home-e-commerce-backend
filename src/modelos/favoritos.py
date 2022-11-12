@@ -4,8 +4,11 @@ import os
 class FavoritoProductos(db.Model):
     __tablename__ = "favoritoProductos"
     id = db.Column(db.Integer,  primary_key=True)
-    userId = db.Column(db.Integer, db.foreignKey('user.id'))
-    productId = db.Column(db.Integer, db.foreignKey('producto.id'))
+    userId = db.Column(db.Integer, db.ForeignKey('user.id'))
+    productId = db.Column(db.Integer, db.ForeignKey('producto.id'))
+
+    def __repr__(self):
+        return '<FavoritoProducto %r>' % self.name
 
     def serialize(self):
         return {

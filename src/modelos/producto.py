@@ -5,9 +5,10 @@ class Producto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), unique=False, nullable=True)
     stock = db.Column(db.Integer, unique = False, nullable=False)
-    precio = db.Column(db.Float)
+    precio = db.Column(db.Numeric(precision=10, scale=2), unique=False)
     parent_id = Column(db.Integer, ForeignKey("user.id"))
-    user_favorite = db.relationship("Favorite_People", backref="Producto")
+    user_favorite = db.relationship("Favorite_People", backref="producto")
+    carritoCompras = db.relationship("CarritoCompras", backref="producto")
 
     def __repr__(self):
         return '<Producto %r>' % self.name
@@ -15,9 +16,7 @@ class Producto(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "name": self.name,
-            "stock": self.stock,
-            "precio": self.precio
+            "name": self.name
         }
     
     
