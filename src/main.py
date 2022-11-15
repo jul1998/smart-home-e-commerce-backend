@@ -31,7 +31,7 @@ CORS(app)
 setup_admin(app)
 
 #####  Importar Modelos  ####
-from src.modelos import User 
+from src.modelos import User, Producto, FavoritoProductos, CarritoCompras
 
 ##### Importar las Rutas ####
 from src.rutas import signup
