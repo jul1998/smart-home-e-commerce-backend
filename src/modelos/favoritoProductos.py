@@ -8,7 +8,7 @@ class FavoritoProductos(db.Model):
     productId = db.Column(db.Integer, db.ForeignKey('producto.id'))
 
     def __repr__(self):
-        return '<FavoritoProducto %r>' % self.name
+        return '<FavoritoProductos %r>' % self.name
 
     def serialize(self):
         return {
