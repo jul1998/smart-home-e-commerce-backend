@@ -2,8 +2,8 @@ from ..db import db
 import os
 
 
-class User(db.Model):
-    __tablename__ = "user"
+class AdminUser(db.Model):
+    __tablename__ = "adminuser"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(250), unique=False, nullable=False)
@@ -17,7 +17,7 @@ class User(db.Model):
 
 
     def __repr__(self):
-        return '<User %r>' % self.email
+        return '<AdminUser %r>' % self.email
 
     def serialize(self):
         return {

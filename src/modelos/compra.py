@@ -7,3 +7,4 @@ class Compras(db.Model):
     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     productId = db.Column(db.Integer, db.ForeignKey('producto.id'))
     costo = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
+    
