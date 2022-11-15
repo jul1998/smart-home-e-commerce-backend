@@ -11,8 +11,6 @@ class AdminUser(db.Model):
     phone = db.Column(db.Integer, unique=False, nullable=False)
     address = db.Column(db.String(250), unique= False, nullable=True)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-    user_favorites = db.relationship("FavoritoProductos", backref="user")
-    carritoCompras = db.relationship("CarritoCompras", backref="producto")
     estado = db.Column(db.String(60), nullable=False)
 
 

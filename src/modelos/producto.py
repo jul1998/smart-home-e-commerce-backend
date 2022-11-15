@@ -6,8 +6,8 @@ class Producto(db.Model):
     name = db.Column(db.String(150), unique=False, nullable=True)
     stock = db.Column(db.Integer, unique = False, nullable=False)
     precio = db.Column(db.Numeric(precision=10, scale=2), unique=False)
-    parent_id = Column(db.Integer, ForeignKey("user.id"))
-    user_favorite = db.relationship("Favorite_People", backref="producto")
+    #parent_id = db.Column(db.Integer, db.Foreignkey('user.id'))
+    user_favorite = db.relationship("FavoritoProductos", backref="producto")
     carritoCompras = db.relationship("CarritoCompras", backref="producto")
     estado = db.Column(db.String(60), nullable = False)
 
