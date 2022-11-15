@@ -18,12 +18,17 @@ def signup():
         if body['email'] is None or body['email']=="":
             raise APIException("email es inválido" , status_code=400)
         if body['password'] is None or body['password']=="":
-            raise APIException("password es inválido" , status_code=400)      
+            raise APIException("password es inválido" , status_code=400) 
+        if body['phone'] is None or body['phone']=="":
+            raise APIException("password es inválido" , status_code=400)
+        if body['name'] is None or body['name']=="":
+            raise APIException("password es inválido" , status_code=400)
+            
       
 
         password = bcrypt.generate_password_hash(body['password'], 10).decode("utf-8")
         
-        new_user = User(email=body['email'], password=password, is_active=True)
+        new_user = User(email=body['email'], password=password, is_active=True, estado="Active")
        
 
         user = User.query.filter_by(email=body['email'])

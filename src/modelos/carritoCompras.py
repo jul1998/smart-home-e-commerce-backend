@@ -7,7 +7,7 @@ class CarritoCompras(db.Model):
     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     productId = db.Column(db.Integer, db.ForeignKey('producto.id'))
     cantidad = db.Column(db.Integer, nullable = False)
-    costoUnitario = db.Column(db.Numeric(precision=10, scale=2), db.ForeignKey('producto.precio'))
+    #costoUnitario = db.Column(db.Numeric(precision=10, scale=2), db.ForeignKey('producto.precio'))
     
     def __repr__(self):
         return '<CarritoCompras %r>' % self.name
@@ -17,5 +17,6 @@ class CarritoCompras(db.Model):
             "id": self.id,
             "userId": self.userId,
             "productId": self.productId,
-            "cantidad": self.cantidad
+            "cantidad": self.cantidad,
+            "costoUnitario": Producto.query.get(self.productId).serialize()['precio']
         }
