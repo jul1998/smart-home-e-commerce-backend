@@ -42,4 +42,10 @@ def create_product():
     else:
         db.session.commit()
         return jsonify({"msg":"Product added successfuly"}),200
-    
+
+
+@app.route("/products_list")
+def get_product_list():
+    all_products = Producto.query.all()
+    all_products_list = list(map(lambda product: product.serialize(), all_products))
+    return jsonify(all_products_list)
