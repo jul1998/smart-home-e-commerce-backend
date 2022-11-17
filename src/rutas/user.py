@@ -1,8 +1,8 @@
 import os
 from ..main import request, jsonify, app, bcrypt, create_access_token, get_jwt_identity, jwt_required, get_jwt
 from ..db import db
-from ..modelos import User
-from flask import Flask, url_for
+from ..modelos import User, BlockedList
+from flask import Flask, url_for, redirect
 from datetime import datetime, timezone, time
 import json
 from ..utils import APIException
@@ -103,9 +103,9 @@ def logout():
     jti = get_jwt()["jti"]
     now = datetime.now(timezone.utc)
 
-    #tokenBlocked = TokenBlockedList(token=jti, created_at=now)
-    # db.session.add(tokenBlocked)
-    # db.session.commit()
+    tokenBlocked = BlockedList(token=jti, created_at=now)
+    db.session.add(tokenBlocked)
+    db.session.commit()
 
     return jsonify({"message": "token eliminado"})
 
@@ -139,4 +139,22 @@ def get_carritoCompras():
     carrito_completo = carrito_producto
     print(carrito_completo)
     return jsonify(carrito_completo), 200
+
+@app.route("/user/<int:user_id>/change_password", methods=["GET","PUT"])
+@jwt_required()
+def change_password(user_id):
+    """Ruta para cambiar password"""
+    body = request.get_json()
+    password_request = body["password"]
+    if request.method == "PUT":
+        hash_password = bcrypt.generate_password_hash(
+                password_request, 10).decode("utf-8") #Crear nueva password encriptada
+
+        password_to_change = User.query.filter_by(id=user_id).first() #Obtener usuario por user_id en url
+        password_to_change.password = hash_password # Cambiar actual password
+        db.session.commit() #Commit cambios
+        return redirect (url_for("logout"))# Redireccionar a ruta de logout para agregar token a blocked list
+    return jsonify("None")
+
+
 
