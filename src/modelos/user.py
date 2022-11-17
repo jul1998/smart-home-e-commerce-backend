@@ -17,6 +17,7 @@ class User(db.Model):
     problemas = db.relationship("Problemas", backref="user")
     reviews = db.relationship("Reviews", backref="user")
     estado = db.Column(db.String(60), nullable=False)
+    
 
 
     def __repr__(self):
