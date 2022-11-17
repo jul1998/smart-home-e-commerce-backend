@@ -130,3 +130,13 @@ def get_user_by_id(user_id):
         raise APIException("El usuario no existe", status_code=400)
     # print(user.serialize())
     return jsonify(user.serialize()), 200
+
+@app.route('/user/carritoCompras', methods=['GET'])
+#@jwt_required()
+def get_carritoCompras():
+    carrito_producto = CarritoCompras.query.all()
+    carrito_producto = list(map( lambda carrito_producto: carrito_producto.serialize(), carrito_productos))
+    carrito_completo = carrito_producto
+    print(carrito_completo)
+    return jsonify(carrito_completo), 200
+
