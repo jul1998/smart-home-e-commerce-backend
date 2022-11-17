@@ -9,6 +9,7 @@ class Producto(db.Model):
     #parent_id = db.Column(db.Integer, db.Foreignkey('user.id'))
     user_favorite = db.relationship("FavoritoProductos", backref="producto")
     carritoCompras = db.relationship("CarritoCompras", backref="producto")
+    Compras = db.relationship("Compras", backref="producto")
     estado = db.Column(db.String(60), nullable = False)
 
     def __repr__(self):

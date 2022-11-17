@@ -13,6 +13,7 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     user_favorites = db.relationship("FavoritoProductos", backref="user")
     carritoCompras = db.relationship("CarritoCompras", backref="user")
+    Compras = db.relationship("Compras", backref="user")
     estado = db.Column(db.String(60), nullable=False)
     
 

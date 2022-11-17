@@ -1,7 +1,6 @@
 from .user import User
 from .producto import Producto
-from .favoritos import FavoritoProductos
+from .favoritoProductos import FavoritoProductos
 from .carritoCompras import CarritoCompras
-from .compra import Compras
 from .adminUser import AdminUser
-
+from .compras import Compras
