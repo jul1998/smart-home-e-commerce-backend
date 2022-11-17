@@ -9,6 +9,7 @@ class Compras(db.Model):
     costo = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
     trackId = db.Column(db.String(250), unique=True)
     estadoEnvio = db.Column(db.String(60), nullable=False)
+    problemas = db.relationship("Problemas", backref="compras")
 
     
     def __repr__(self):

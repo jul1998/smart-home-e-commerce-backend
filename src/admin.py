@@ -4,7 +4,8 @@ from .db import db
 
 
 ### Importar los modelos #####
-from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, AdminUser, Compras 
+from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, Compras, BlockedList
+from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, AdminUser, Compras, Reviews, Problemas, PreguntasProductos 
 
 
 from flask_admin.contrib.sqla import ModelView
@@ -19,5 +20,6 @@ def setup_admin(app):
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Producto, db.session))
     admin.add_view(ModelView(Compras, db.session))
+    admin.add_view(ModelView(BlockedList, db.session))
     # You can duplicate that line to add mew models
     # admin.add_view(ModelView(YourModelName, db.session))
