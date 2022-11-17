@@ -140,3 +140,10 @@ def get_carritoCompras():
     print(carrito_completo)
     return jsonify(carrito_completo), 200
 
+@app.route("/<user/<int:user_id>/change_password", methods=["GET","PUT"])
+def change_password(user_id):
+    password_to_change = User.query.filter_by(id=user_id).first()
+    return jsonify(password_to_change)
+
+
+
