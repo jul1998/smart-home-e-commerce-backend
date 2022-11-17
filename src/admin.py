@@ -4,7 +4,7 @@ from .db import db
 
 
 ### Importar los modelos #####
-from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, Compras
+from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, AdminUser, Compras, Reviews, Problemas, PreguntasProductos 
 
 
 from flask_admin.contrib.sqla import ModelView
