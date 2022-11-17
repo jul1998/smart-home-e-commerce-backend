@@ -15,6 +15,7 @@ class User(db.Model):
     carritoCompras = db.relationship("CarritoCompras", backref="user")
     Compras = db.relationship("Compras", backref="user")
     estado = db.Column(db.String(60), nullable=False)
+    
 
 
     def __repr__(self):
