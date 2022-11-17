@@ -4,3 +4,6 @@ from .favoritoProductos import FavoritoProductos
 from .carritoCompras import CarritoCompras
 from .adminUser import AdminUser
 from .compras import Compras
+from .preguntasProductos import PreguntasProductos
+from .reviews import Reviews
+from .problemas import Problemas
