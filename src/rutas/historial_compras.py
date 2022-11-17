@@ -8,7 +8,9 @@ import json
 from ..utils import APIException
 
 @app.route("/<int:user_id>/order_history")
+@jwt_required()
 def get_order_history(user_id):
+    print(get_jwt_identity())
     body = request.get_json()
     user_body = body["user_body"]
 
