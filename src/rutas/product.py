@@ -50,7 +50,8 @@ def get_product_list():
     all_products_list = list(map(lambda product: product.serialize(), all_products))
     return jsonify(all_products_list)
 
-@app.route("/user/<int:user_id>/add_to_favorite/product/<int:product_id>", methods=["GET","POST"])
+@app.route("/user/<int:user_id>/add_to_favorite/product/<int:product_id>", methods=["POST"])
+@jwt_required()
 def add_to_favorite_list(user_id,product_id):
     """Ruta para obtener lista de productos favoritos """
     user = User.query.filter_by(id=user_id).first() #Obtener el user id de url
