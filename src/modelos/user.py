@@ -13,7 +13,11 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     user_favorites = db.relationship("FavoritoProductos", backref="user")
     carritoCompras = db.relationship("CarritoCompras", backref="user")
+    Compras = db.relationship("Compras", backref="user")
+    problemas = db.relationship("Problemas", backref="user")
+    reviews = db.relationship("Reviews", backref="user")
     estado = db.Column(db.String(60), nullable=False)
+    
 
 
     def __repr__(self):
