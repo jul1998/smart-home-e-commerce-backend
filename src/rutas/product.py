@@ -8,6 +8,7 @@ import json
 from ..utils import APIException
 
 @app.route("/producto", methods=["POST"])
+#@jwt_required()
 def create_product():
     body = request.get_json() 
     product_name = body["name"]
