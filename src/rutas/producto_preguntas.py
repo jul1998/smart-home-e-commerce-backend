@@ -14,12 +14,15 @@ def post_product_question(product_id, user_id):
     body = request.get_json()
     now = datetime.now(timezone.utc)
 
-
+    
     ask_by_userid_body = user_id
     productId_body = product_id
     descripcion_body = body["description"]
     posted_at_body = now
     estado_body = "Pending"
+
+    if descripcion_body == "" or len(descripcion_body) == 0:
+        return APIException("Description is empty", status_code=400)
 
 
     new_question = PreguntasProductos(ask_by_userid=ask_by_userid_body, 
