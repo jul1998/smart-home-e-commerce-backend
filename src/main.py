@@ -34,7 +34,7 @@ setup_admin(app)
 from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, AdminUser, Compras, Reviews, Problemas, PreguntasProductos, BlockedList 
 
 ##### Importar las Rutas ####
-from src.rutas import signup, create_product, get_product_list, get_order_history,add_to_favorite_list
+from src.rutas import signup, create_product, get_product_list, get_order_history,add_to_favorite_list, post_product_question, get_questions
 
 
 
