@@ -13,12 +13,12 @@ class PreguntasProductos(db.Model):
 
 
     def __repr__(self):
-        return '<PreguntasProductos %r>' % self.email
+        return '<PreguntasProductos %r>' % self.ask_by_userid
 
     def serialize(self):
         return {
             "id": self.id,
-            "userId": self.userId,
+            "userId": self.ask_by_userid,
             "productId": self.productId,
             "descripcion": self.descripcion
         }
