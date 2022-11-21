@@ -26,12 +26,14 @@ def signup():
             raise APIException("password es inválido", status_code=400)
         if body['name'] is None or body['name'] == "":
             raise APIException("password es inválido", status_code=400)
+        if body['address'] is None or body['address'] == "":
+            raise APIException("password es inválido", status_code=400)
         
 
         password = bcrypt.generate_password_hash(
             body['password'], 10).decode("utf-8")
 
-        new_user = User(email=body['email'], password=password, is_active=True, estado="Active", name=body['name'], phone=body['phone'], address=address)
+        new_user = User(email=body['email'], password=password, is_active=True, estado="Active", name=body['name'], phone=body['phone'], address=body['address'])
 
         user = User.query.filter_by(email=body['email'])
         if not user:
