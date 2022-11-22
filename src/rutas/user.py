@@ -67,7 +67,7 @@ def login():
         raise APIException("usuario o password no coinciden", status_code=401)
 
     access_token = create_access_token(identity=user.id)
-    return jsonify({"token": access_token, "email": user.email}), 200
+    return jsonify({"token": access_token, "email": user.email, "message": f"Welcome, {user.name.split(' ')[0]}"}), 200
 
 
 @app.route('/helloprotected', methods=['get'])  # endpoint
@@ -90,9 +90,9 @@ def hello_protected():  # definición de la función
     #    return jsonify(msg="Acceso Denegado")
 
     response_body = {
-        "message": "token válido",
+        "isToken": "token válido",
         "user_id": user.id,  # get_jwt_identity(),
-        "user_email": user.email
+        "user_email": user.email,
     }
 
     return jsonify(response_body), 200
