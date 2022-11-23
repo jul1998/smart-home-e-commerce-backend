@@ -66,7 +66,7 @@ def login():
     if not bcrypt.check_password_hash(user.password, password):
         raise APIException("usuario o password no coinciden", status_code=401)
 
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=user.id) 
     return jsonify({"token": access_token, "email": user.email, "message": f"Welcome, {user.name.split(' ')[0]}"}), 200
 
 
@@ -82,12 +82,12 @@ def hello_protected():  # definición de la función
     # get_jwt() regresa un diccionario, y una propiedad importante es jti
     jti = get_jwt()["jti"]
 
-    #tokenBlocked = TokenBlockedList.query.filter_by(token=jti).first()
+    tokenBlocked = BlockedList.query.filter_by(token=jti).first()
     # cuando hay coincidencia tokenBloked es instancia de la clase TokenBlockedList
     # cuando No hay coincidencia tokenBlocked = None
 
-    # if isinstance(tokenBlocked, TokenBlockedList):
-    #    return jsonify(msg="Acceso Denegado")
+    if isinstance(tokenBlocked, BlockedList):
+        return jsonify(msg="Acceso Denegado")
 
     response_body = {
         "isToken": "token válido",
