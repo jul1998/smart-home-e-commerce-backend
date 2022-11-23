@@ -9,7 +9,6 @@ class AdminUser(db.Model):
     password = db.Column(db.String(250), unique=False, nullable=False)
     name = db.Column(db.String(60), unique=False, nullable=True)
     phone = db.Column(db.Integer, unique=False, nullable=False)
-    address = db.Column(db.String(250), unique= False, nullable=True)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     estado = db.Column(db.String(60), nullable=False)
 
@@ -22,7 +21,6 @@ class AdminUser(db.Model):
             "id": self.id,
             "email": self.email,
             "name": self.name,
-            "address": self.address,
             "phone": self.phone
             # do not. serialize the password, its a security breach
         }
