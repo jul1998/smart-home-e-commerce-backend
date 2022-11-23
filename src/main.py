@@ -31,10 +31,10 @@ CORS(app)
 setup_admin(app)
 
 #####  Importar Modelos  ####
-from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, AdminUser, Compras, Reviews, Problemas, PreguntasProductos
+from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, AdminUser, Compras, Reviews, Problemas, PreguntasProductos, BlockedList 
 
 ##### Importar las Rutas ####
-from src.rutas import signup, create_product, get_product_list, get_order_history
+from src.rutas import signup, create_product, get_product_list, get_order_history,add_to_favorite_list, post_product_question, get_questions
 
 
 
