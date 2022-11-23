@@ -112,18 +112,6 @@ def logout():
     return jsonify({"message": "token eliminado"})
 
 
-@app.route('/lista-usuarios', methods=['get'])
-@jwt_required()
-def allUsers():
-    users = User.query.all()  # Objeto de SQLAlchemy
-    users = list(map(lambda item: item.serialize(), users))
-
-    response_body = {
-        "lista": users
-    }
-    return jsonify(response_body), 200
-
-
 @app.route('/user/<int:user_id>', methods=['GET'])
 @jwt_required()
 def get_user_by_id(user_id):

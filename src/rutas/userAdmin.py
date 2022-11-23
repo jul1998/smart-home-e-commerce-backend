@@ -34,7 +34,7 @@ def signup():
 
         new_user = AdminUser(email=body['email'], password=password, is_active=True, estado="Active", name=body['name'], phone=body['phone'], address=address)
 
-        user = User.query.filter_by(email=body['email'])
+        user = AdminUser.query.filter_by(email=body['email'])
         if not user:
             raise APIException("El usuario ya existe", status_code=400)
 
@@ -56,7 +56,7 @@ def login():
     email = body['email']
     password = body['password']
 
-    user = User.query.filter_by(email=email).first()
+    user = AdminUser.query.filter_by(email=email).first()
 
     if user is None:
         raise APIException("usuario no existe", status_code=401)
@@ -76,7 +76,7 @@ def hello_protected():  # definición de la función
     # imprimiendo la identidad del usuario que es el id
     print("id del usuario:", get_jwt_identity())
     # búsqueda del id del usuario en la BD
-    user = User.query.get(get_jwt_identity())
+    user = AdminUser.query.get(get_jwt_identity())
 
     # get_jwt() regresa un diccionario, y una propiedad importante es jti
     jti = get_jwt()["jti"]
@@ -122,6 +122,17 @@ def allUsers():
     }
     return jsonify(response_body), 200
 
+@app.route('/lista-usuarios-admin', methods=['get'])
+@jwt_required()
+def allUsers():
+    users = AdminUser.query.all()  # Objeto de SQLAlchemy
+    users = list(map(lambda item: item.serialize(), users))
+
+    response_body = {
+        "lista": users
+    }
+    return jsonify(response_body), 200
+
 
 @app.route('/user/<int:user_id>', methods=['GET'])
 @jwt_required()
@@ -132,14 +143,6 @@ def get_user_by_id(user_id):
     # print(user.serialize())
     return jsonify(user.serialize()), 200
 
-@app.route('/user/carritoCompras', methods=['GET'])
-#@jwt_required()
-def get_carritoCompras():
-    carrito_producto = CarritoCompras.query.all()
-    carrito_producto = list(map( lambda carrito_producto: carrito_producto.serialize(), carrito_productos))
-    carrito_completo = carrito_producto
-    print(carrito_completo)
-    return jsonify(carrito_completo), 200
 
 @app.route("/user/<int:user_id>/change_password", methods=["GET","PUT"])
 @jwt_required()
