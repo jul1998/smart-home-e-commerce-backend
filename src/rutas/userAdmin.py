@@ -1,19 +1,20 @@
 import os
 from ..main import request, jsonify, app, bcrypt, create_access_token, get_jwt_identity, jwt_required, get_jwt
 from ..db import db
-from ..modelos import User, BlockedList
+from ..modelos import AdminUser, User, BlockedList
 from flask import Flask, url_for, redirect
 from datetime import datetime, timezone, time
 import json
 from ..utils import APIException
 
 
-@app.route('/signup', methods=['POST'])
-def signup():
+@app.route('/signupAdmin', methods=['POST'])
+@jwt_required()
+def signupAmin():
     body = request.get_json()
     print(body)
     # print(body['username'])
-    address = "ninguno"
+    
     try:
         if body is None:
             raise APIException(
@@ -26,16 +27,14 @@ def signup():
             raise APIException("password es inválido", status_code=400)
         if body['name'] is None or body['name'] == "":
             raise APIException("password es inválido", status_code=400)
-        if body['address'] is None or body['address'] == "":
-            raise APIException("password es inválido", status_code=400)
         
 
         password = bcrypt.generate_password_hash(
-            body['password'], 10).decode("utf-8")
+            body['password'], 12).decode("utf-8")
 
-        new_user = User(email=body['email'], password=password, is_active=True, estado="Active", name=body['name'], phone=body['phone'], address=body['address'])
+        new_user = AdminUser(email=body['email'], password=password, is_active=True, estado="Active", name=body['name'], phone=body['phone'], address=address)
 
-        user = User.query.filter_by(email=body['email'])
+        user = AdminUser.query.filter_by(email=body['email'])
         if not user:
             raise APIException("El usuario ya existe", status_code=400)
 
@@ -51,13 +50,13 @@ def signup():
         return jsonify({"mensaje": "error al registrar usuario"}), 500
 
 
-@app.route('/login', methods=['POST'])
-def login():
+@app.route('/loginAdmin', methods=['POST'])
+def loginAdmin():
     body = request.get_json()
     email = body['email']
     password = body['password']
 
-    user = User.query.filter_by(email=email).first()
+    user = AdminUser.query.filter_by(email=email).first()
 
     if user is None:
         raise APIException("usuario no existe", status_code=401)
@@ -66,73 +65,73 @@ def login():
     if not bcrypt.check_password_hash(user.password, password):
         raise APIException("usuario o password no coinciden", status_code=401)
 
-    access_token = create_access_token(identity=user.id) 
-    return jsonify({"token": access_token, "email": user.email, "message": f"Welcome, {user.name.split(' ')[0]}"}), 200
+    access_token = create_access_token(identity=user.id)
+    return jsonify({"token": access_token, "email": user.email}), 200
 
 
 @app.route('/helloprotected', methods=['get'])  # endpoint
 @jwt_required()  # decorador que protege al endpoint
-def hello_protected():  # definición de la función
+def hello_protectedAdmin():  # definición de la función
     #claims = get_jwt()
     # imprimiendo la identidad del usuario que es el id
     print("id del usuario:", get_jwt_identity())
     # búsqueda del id del usuario en la BD
-    user = User.query.get(get_jwt_identity())
+    user = AdminUser.query.get(get_jwt_identity())
 
     # get_jwt() regresa un diccionario, y una propiedad importante es jti
     jti = get_jwt()["jti"]
 
-    tokenBlocked = BlockedList.query.filter_by(token=jti).first()
+    #tokenBlocked = TokenBlockedList.query.filter_by(token=jti).first()
     # cuando hay coincidencia tokenBloked es instancia de la clase TokenBlockedList
     # cuando No hay coincidencia tokenBlocked = None
 
-    if isinstance(tokenBlocked, BlockedList):
-        return jsonify(msg="Acceso Denegado")
+    # if isinstance(tokenBlocked, TokenBlockedList):
+    #    return jsonify(msg="Acceso Denegado")
 
     response_body = {
-        "isToken": "token válido",
+        "message": "token válido",
         "user_id": user.id,  # get_jwt_identity(),
-        "user_email": user.email,
+        "user_email": user.email
     }
 
     return jsonify(response_body), 200
 
-
-@app.route('/logout', methods=['get'])  # endpoint
+@app.route('/lista-usuarios', methods=['get'])
 @jwt_required()
-def logout():
-    print(get_jwt())
-    jti = get_jwt()["jti"]
-    now = datetime.now(timezone.utc)
+def allUsers():
+    users = User.query.all()  # Objeto de SQLAlchemy
+    users = list(map(lambda item: item.serialize(), users))
 
-    tokenBlocked = BlockedList(token=jti, created_at=now)
-    db.session.add(tokenBlocked)
-    db.session.commit()
+    response_body = {
+        "lista": users
+    }
+    return jsonify(response_body), 200
 
-    return jsonify({"message": "token eliminado"})
+@app.route('/lista-usuarios-admin', methods=['get'])
+@jwt_required()
+def allUsersAdmin():
+    users = AdminUser.query.all()  # Objeto de SQLAlchemy
+    users = list(map(lambda item: item.serialize(), users))
+
+    response_body = {
+        "lista": users
+    }
+    return jsonify(response_body), 200
 
 
 @app.route('/user/<int:user_id>', methods=['GET'])
 @jwt_required()
-def get_user_by_id(user_id):
+def get_user_by_idAdmin(user_id):
     user = User.query.get(user_id)
     if user == None:
         raise APIException("El usuario no existe", status_code=400)
     # print(user.serialize())
     return jsonify(user.serialize()), 200
 
-@app.route('/user/carritoCompras', methods=['GET'])
-#@jwt_required()
-def get_carritoCompras():
-    carrito_producto = CarritoCompras.query.all()
-    carrito_producto = list(map( lambda carrito_producto: carrito_producto.serialize(), carrito_productos))
-    carrito_completo = carrito_producto
-    print(carrito_completo)
-    return jsonify(carrito_completo), 200
 
 @app.route("/user/<int:user_id>/change_password", methods=["GET","PUT"])
 @jwt_required()
-def change_password(user_id):
+def change_passwordAdmin(user_id):
     """Ruta para cambiar password"""
     body = request.get_json()
     password_request = body["password"]
@@ -145,6 +144,7 @@ def change_password(user_id):
         db.session.commit() #Commit cambios
         return redirect (url_for("logout"))# Redireccionar a ruta de logout para agregar token a blocked list
     return jsonify("None")
+
 
 
 

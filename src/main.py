@@ -34,8 +34,7 @@ setup_admin(app)
 from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, AdminUser, Compras, Reviews, Problemas, PreguntasProductos, BlockedList 
 
 ##### Importar las Rutas ####
-from src.rutas import signup, create_product, get_product_list, get_order_history,add_to_favorite_list, post_product_question, get_questions
-
+from src.rutas import signup, login, hello_protected, logout, get_user_by_id, get_carritoCompras, change_password, signupAdmin, loginAdmin, hello_protectedAdmin, allUsers, allUsersAdmin, get_user_by_idAdmin, change_passwordAdmin, post_product_question, get_questions, get_allquestions, create_product, get_product_list, add_to_favorite_list, get_order_history
 
 
 # Handle/serialize errors like a JSON object

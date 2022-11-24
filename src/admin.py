@@ -4,7 +4,8 @@ from .db import db
 
 
 ### Importar los modelos #####
-from src.modelos import User, Producto, Compras, FavoritoProductos, PreguntasProductos, BlockedList
+
+
 
 from flask_admin.contrib.sqla import ModelView
 
@@ -20,4 +21,5 @@ def setup_admin(app):
     admin.add_view(ModelView(Compras, db.session))
     admin.add_view(ModelView(FavoritoProductos, db.session))
     admin.add_view(ModelView(PreguntasProductos, db.session))
-    admin.add_view(ModelView(BlockedList, db.session))
+
+
