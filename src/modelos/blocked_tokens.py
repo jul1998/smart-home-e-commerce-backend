@@ -5,7 +5,7 @@ class BlockedList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     token = db.Column(db.String(256), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
-    email=db.Column(db.String(250), nullable=True)
+    email= db.Column(db.String(250), nullable=True)
 
     def serialize(self):
         return ({
