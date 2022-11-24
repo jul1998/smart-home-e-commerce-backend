@@ -11,7 +11,6 @@ from ..utils import APIException
 @app.route('/signupAdmin', methods=['POST'])
 def signupAmin():
     body = request.get_json()
-    print(body)
     # print(body['username'])
     
     try:
@@ -31,17 +30,17 @@ def signupAmin():
         password = bcrypt.generate_password_hash(
             body['password'], 12).decode("utf-8")
 
-        new_user = AdminUser(email=body['email'], password=password, is_active=True, estado="Active", name=body['name'], phone=body['phone'], address=address)
-
-        user = AdminUser.query.filter_by(email=body['email'])
-        if not user:
+        new_user_admin = AdminUser(email=body['email'], password=password, is_active=True, estado="Active", name=body['name'], phone=body['phone'])
+        
+        user_admin = AdminUser.query.filter_by(email=body['email'])
+        if not user_admin:
             raise APIException("El usuario ya existe", status_code=400)
 
-        print(new_user)
+  
         # print(new_user.serialize())
-        db.session.add(new_user)
+        db.session.add(new_user_admin)
         db.session.commit()
-        return jsonify({"mensaje": "Usuario creado exitosamente"}), 201
+        return jsonify({"mensaje": "Usuario admin creado exitosamente"}), 201
 
     except Exception as err:
         db.session.rollback()

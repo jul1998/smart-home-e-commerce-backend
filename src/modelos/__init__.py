@@ -8,3 +8,4 @@ from .compras import Compras
 from .preguntasProductos import PreguntasProductos
 from .reviews import Reviews
 from .problemas import Problemas
+from .adminUser import AdminUser
