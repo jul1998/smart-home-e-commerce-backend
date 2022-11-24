@@ -9,7 +9,6 @@ from ..utils import APIException
 
 
 @app.route('/signupAdmin', methods=['POST'])
-@jwt_required()
 def signupAmin():
     body = request.get_json()
     print(body)
