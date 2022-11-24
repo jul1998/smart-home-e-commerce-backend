@@ -9,7 +9,7 @@ from ..utils import APIException
 
 
 @app.route('/signupAdmin', methods=['POST'])
-def signupAmin():
+def signupAdmin():
     body = request.get_json()
     # print(body['username'])
     
