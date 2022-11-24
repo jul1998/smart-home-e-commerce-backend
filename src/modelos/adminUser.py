@@ -8,7 +8,7 @@ class AdminUser(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(250), unique=False, nullable=False)
     name = db.Column(db.String(60), unique=False, nullable=True)
-    phone = db.Column(db.Integer, unique=False, nullable=False)
+    phone = db.Column(db.String, unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     estado = db.Column(db.String(60), nullable=False)
 
