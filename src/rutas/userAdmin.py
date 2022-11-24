@@ -1,7 +1,7 @@
 import os
 from ..main import request, jsonify, app, bcrypt, create_access_token, get_jwt_identity, jwt_required, get_jwt
 from ..db import db
-from ..modelos import User, BlockedList
+from ..modelos import AdminUser, User, BlockedList
 from flask import Flask, url_for, redirect
 from datetime import datetime, timezone, time
 import json
@@ -10,7 +10,7 @@ from ..utils import APIException
 
 @app.route('/signupAdmin', methods=['POST'])
 @jwt_required()
-def signup():
+def signupAmin():
     body = request.get_json()
     print(body)
     # print(body['username'])
@@ -51,7 +51,7 @@ def signup():
 
 
 @app.route('/loginAdmin', methods=['POST'])
-def login():
+def loginAdmin():
     body = request.get_json()
     email = body['email']
     password = body['password']
@@ -71,7 +71,7 @@ def login():
 
 @app.route('/helloprotected', methods=['get'])  # endpoint
 @jwt_required()  # decorador que protege al endpoint
-def hello_protected():  # definición de la función
+def hello_protectedAdmin():  # definición de la función
     #claims = get_jwt()
     # imprimiendo la identidad del usuario que es el id
     print("id del usuario:", get_jwt_identity())
@@ -96,21 +96,6 @@ def hello_protected():  # definición de la función
 
     return jsonify(response_body), 200
 
-
-@app.route('/logout', methods=['get'])  # endpoint
-@jwt_required()
-def logout():
-    print(get_jwt())
-    jti = get_jwt()["jti"]
-    now = datetime.now(timezone.utc)
-
-    tokenBlocked = BlockedList(token=jti, created_at=now)
-    db.session.add(tokenBlocked)
-    db.session.commit()
-
-    return jsonify({"message": "token eliminado"})
-
-
 @app.route('/lista-usuarios', methods=['get'])
 @jwt_required()
 def allUsers():
@@ -124,7 +109,7 @@ def allUsers():
 
 @app.route('/lista-usuarios-admin', methods=['get'])
 @jwt_required()
-def allUsers():
+def allUsersAdmin():
     users = AdminUser.query.all()  # Objeto de SQLAlchemy
     users = list(map(lambda item: item.serialize(), users))
 
@@ -136,7 +121,7 @@ def allUsers():
 
 @app.route('/user/<int:user_id>', methods=['GET'])
 @jwt_required()
-def get_user_by_id(user_id):
+def get_user_by_idAdmin(user_id):
     user = User.query.get(user_id)
     if user == None:
         raise APIException("El usuario no existe", status_code=400)
@@ -146,7 +131,7 @@ def get_user_by_id(user_id):
 
 @app.route("/user/<int:user_id>/change_password", methods=["GET","PUT"])
 @jwt_required()
-def change_password(user_id):
+def change_passwordAdmin(user_id):
     """Ruta para cambiar password"""
     body = request.get_json()
     password_request = body["password"]
