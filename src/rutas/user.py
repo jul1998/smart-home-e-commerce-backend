@@ -33,22 +33,23 @@ def signup():
         password = bcrypt.generate_password_hash(
             body['password'], 10).decode("utf-8")
 
-        new_user = User(email=body['email'], password=password, is_active=True, estado="Active", name=body['name'], phone=body['phone'], address=body['address'])
+        new_user = User(email=body['email'], password=password, is_active=True, estado="Active", name=body['name'], img_profile=None, phone=body['phone'], address=body['address'])
 
-        user = User.query.filter_by(email=body['email'])
-        if not user:
-            raise APIException("El usuario ya existe", status_code=400)
+
 
         print(new_user)
         # print(new_user.serialize())
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({"mensaje": "Usuario creado exitosamente"}), 201
+        return jsonify({"msg":"Usuario creado exitosamente"}), 200
 
     except Exception as err:
         db.session.rollback()
+        user = User.query.filter_by(email=body['email'])
+        if user:
+            raise APIException("El usuario ya existe", status_code=400)
         print(err)
-        return jsonify({"mensaje": "error al registrar usuario"}), 500
+        raise APIException({"Error al registrar usuario"}, status_code=400)
 
 
 @app.route('/login', methods=['POST'])
@@ -145,6 +146,11 @@ def change_password(user_id):
         db.session.commit() #Commit cambios
         return redirect (url_for("logout"))# Redireccionar a ruta de logout para agregar token a blocked list
     return jsonify("None")
+
+
+@app.route("/user/<int:user_id>/settings", methods=["GET","PUT"])
+def display_settings():
+    pass
 
 
 
