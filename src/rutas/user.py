@@ -148,4 +148,9 @@ def change_password(user_id):
     return jsonify("None")
 
 
+@app.route("/user/<int:user_id>/settings", methods=["GET","PUT"])
+def display_settings():
+    pass
+
+
 
