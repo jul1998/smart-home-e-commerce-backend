@@ -149,8 +149,32 @@ def change_password(user_id):
 
 
 @app.route("/user/<int:user_id>/settings", methods=["GET","PUT"])
-def display_settings():
-    pass
+@jwt_required()
+def display_settings(user_id):
+    body = request.get_json()
+    print(body["img"])
+
+    if body is None:
+        raise APIException(
+                "Body está vacío o email no viene en el body, es inválido", status_code=400)
+    if body['email'] is None or body['email'] == "":
+        raise APIException("email es inválido", status_code=400)
+    if body['phone'] is None or body['phone'] == "":
+        raise APIException("phone es inválido", status_code=400)
+    if body['name'] is None or body['name'] == "":
+        raise APIException("name es inválido", status_code=400)
+    if body['address'] is None or body['address'] == "":
+        raise APIException("address es inválido", status_code=400)
+
+    user_to_update = User.query.get(user_id)
+    user_to_update.email = body["email"]
+    user_to_update.phone = body["phone"]
+    user_to_update.name = body["name"]
+    user_to_update.address = body["address"]
+    user_to_update.img_profile = body["img"]
+    db.session.commit()
+
+    return jsonify("Settings were changed successfuly"), 200
 
 
 
