@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c3e8e8355134
+Revision ID: b2fbb102e5ef
 Revises: 
-Create Date: 2022-11-29 04:45:23.819696
+Create Date: 2022-12-01 02:46:22.914061
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c3e8e8355134'
+revision = 'b2fbb102e5ef'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -34,6 +34,14 @@ def upgrade():
     sa.Column('token', sa.String(length=256), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('email', sa.String(length=250), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('token')
+    )
+    op.create_table('paypal_token',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('token', sa.String(length=256), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('tokenStatus', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('token')
     )
@@ -133,6 +141,7 @@ def downgrade():
     op.drop_table('carritoCompras')
     op.drop_table('user')
     op.drop_table('producto')
+    op.drop_table('paypal_token')
     op.drop_table('blocked_list')
     op.drop_table('adminuser')
     # ### end Alembic commands ###
