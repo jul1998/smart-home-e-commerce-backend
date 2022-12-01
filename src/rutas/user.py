@@ -137,6 +137,7 @@ def change_password(user_id):
     """Ruta para cambiar password"""
     body = request.get_json()
     password_request = body["password"]
+    print(password_request)
     if request.method == "PUT":
         hash_password = bcrypt.generate_password_hash(
                 password_request, 10).decode("utf-8") #Crear nueva password encriptada
@@ -144,7 +145,8 @@ def change_password(user_id):
         password_to_change = User.query.filter_by(id=user_id).first() #Obtener usuario por user_id en url
         password_to_change.password = hash_password # Cambiar actual password
         db.session.commit() #Commit cambios
-        return redirect (url_for("logout"))# Redireccionar a ruta de logout para agregar token a blocked list
+        return jsonify("Password changed")
+        #return redirect (url_for("logout"))# Redireccionar a ruta de logout para agregar token a blocked list
     return jsonify("None")
 
 
@@ -174,7 +176,7 @@ def display_settings(user_id):
     user_to_update.img_profile = body["img"]
     db.session.commit()
 
-    return jsonify("Settings were changed successfuly"), 200
+    return jsonify({"msg":"Personal information was changed successfuly"}), 200
 
 
 
