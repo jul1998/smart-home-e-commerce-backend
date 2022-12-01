@@ -180,6 +180,3 @@ def display_settings(user_id):
     db.session.commit()
 
     return jsonify("Settings were changed successfuly"), 200
-
-
-
