@@ -69,6 +69,11 @@ def login():
     access_token = create_access_token(identity=user.id) 
     return jsonify({"token": access_token, "email": user.email, "message": f"Welcome, {user.name.split(' ')[0]}"}), 200
 
+@app.route('/payment', methods=['POST'])
+@jwt_required
+def payment():
+    body = request.get_json()
+    
 
 @app.route('/helloprotected', methods=['get'])  # endpoint
 @jwt_required()  # decorador que protege al endpoint
