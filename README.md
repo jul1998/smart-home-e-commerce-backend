@@ -72,3 +72,8 @@ $ heroku create <your_application_name>
 $ git push heroku main
 ```
 :warning: For a more detailed explanation on working with .env variables or the MySQL database [read the full guide](https://start.4geeksacademy.com/backend/deploy-heroku-mysql).
+
+
+
+
+pipenv run reset_db

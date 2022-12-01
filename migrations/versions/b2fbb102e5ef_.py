@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: cc3671c0c34d
+Revision ID: b2fbb102e5ef
 Revises: 
-Create Date: 2022-11-19 06:04:32.622936
+Create Date: 2022-12-01 02:46:22.914061
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'cc3671c0c34d'
+revision = 'b2fbb102e5ef'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,8 +23,7 @@ def upgrade():
     sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('password', sa.String(length=250), nullable=False),
     sa.Column('name', sa.String(length=60), nullable=True),
-    sa.Column('phone', sa.Integer(), nullable=False),
-    sa.Column('address', sa.String(length=250), nullable=True),
+    sa.Column('phone', sa.String(length=60), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('estado', sa.String(length=60), nullable=False),
     sa.PrimaryKeyConstraint('id'),
@@ -35,6 +34,14 @@ def upgrade():
     sa.Column('token', sa.String(length=256), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('email', sa.String(length=250), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('token')
+    )
+    op.create_table('paypal_token',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('token', sa.String(length=256), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('tokenStatus', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('token')
     )
@@ -53,6 +60,7 @@ def upgrade():
     sa.Column('name', sa.String(length=60), nullable=False),
     sa.Column('phone', sa.String(length=120), nullable=False),
     sa.Column('address', sa.String(length=250), nullable=True),
+    sa.Column('img_profile', sa.Text(), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('estado', sa.String(length=60), nullable=False),
     sa.PrimaryKeyConstraint('id'),
@@ -133,6 +141,7 @@ def downgrade():
     op.drop_table('carritoCompras')
     op.drop_table('user')
     op.drop_table('producto')
+    op.drop_table('paypal_token')
     op.drop_table('blocked_list')
     op.drop_table('adminuser')
     # ### end Alembic commands ###

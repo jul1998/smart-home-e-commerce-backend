@@ -43,3 +43,10 @@ def get_questions(product_id):
     #questions = PreguntasProductos.query.all()
     questions_json = list(map(lambda question: question.serialize(),question_query))#Map over questions in product
     return jsonify(questions_json)
+
+@app.route("/preguntasAdmin") #route para ver todas las preguntas hechas y poder responderlas.
+@jwt_required() #Solo admins pueden ver todas las preguntas
+def get_allquestions(): 
+    questions = PreguntasProductos.queryAll()
+    questions_json = list(map(lambda question: question.serialize(),questions))
+    return jsonify(questions_json)

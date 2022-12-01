@@ -34,8 +34,7 @@ setup_admin(app)
 from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, AdminUser, Compras, Reviews, Problemas, PreguntasProductos, BlockedList 
 
 ##### Importar las Rutas ####
-from src.rutas import signup, create_product, get_product_list, get_order_history,add_to_favorite_list, post_product_question, get_questions
-
+from src.rutas import signup, login, hello_protected, logout, get_user_by_id, get_carritoCompras, change_password, signupAdmin, loginAdmin, send_email, display_settings
 
 
 # Handle/serialize errors like a JSON object
@@ -59,5 +58,5 @@ def handle_hello():
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
-    PORT = int(os.environ.get('PORT', 3000))
+    PORT = int(os.environ.get('PORT', 3001))
     app.run(host='0.0.0.0', port=PORT, debug=False)
