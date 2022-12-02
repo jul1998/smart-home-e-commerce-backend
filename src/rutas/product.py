@@ -53,12 +53,15 @@ def get_product_list():
     return jsonify(all_products_list)
 
 @app.route("/user/<int:user_id>/add_to_favorite/product/<int:product_id>", methods=["POST"])
-@jwt_required()
+#@jwt_required()
 def add_to_favorite_list(user_id,product_id):
     """Ruta para obtener lista de productos favoritos """
     user = User.query.filter_by(id=user_id).first() #Obtener el user id de url
     product = Producto.query.filter_by(id=product_id).first() #Obtener el product id de url
+    print(user.id, product.id)
 
+    #favorite = FavoritoProductos.query.filter_by(userId=user_id).first()
+    #print(favorite.product.precio)
 
     try:
         add_favorite = FavoritoProductos(userId=user.id, productId=product.id) #Agregar a db
@@ -81,3 +84,8 @@ def add_to_favorite_list(user_id,product_id):
             "success": True
         }
         return jsonify(msg)
+
+
+@app.route("/user/<int:user_id>/favorite_product/<int:product_id>")
+def get_favorite_product(user_id, product_id):
+    pass

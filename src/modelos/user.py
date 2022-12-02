@@ -12,7 +12,7 @@ class User(db.Model):
     address = db.Column(db.String(250), unique= False, nullable=True)
     img_profile = db.Column(db.Text(), unique= False, nullable=True)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-    user_favorites = db.relationship("FavoritoProductos", backref="user")
+    user_favorites = db.relationship("FavoritoProductos", backref="user") #user_favorites works as a list that contains all favorite products in child table FavoritoProductos
     carritoCompras = db.relationship("CarritoCompras", backref="user")
     Compras = db.relationship("Compras", backref="user")
     problemas = db.relationship("Problemas", backref="user")
