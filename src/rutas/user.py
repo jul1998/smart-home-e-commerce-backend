@@ -123,7 +123,7 @@ def get_user_by_id(user_id):
     return jsonify(user.serialize()), 200
 
 @app.route('/user/carritoCompras', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_carritoCompras():
     carrito_producto = CarritoCompras.query.all()
     carrito_producto = list(map( lambda carrito_producto: carrito_producto.serialize(), carrito_productos))
