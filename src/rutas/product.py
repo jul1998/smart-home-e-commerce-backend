@@ -74,7 +74,7 @@ def add_to_favorite_list(user_id,product_id):
             "product": product.id,
             "success": False
         }
-        return jsonify(msg)
+        return jsonify(msg),400
 
     else:
         db.session.commit() #Commit
@@ -83,7 +83,7 @@ def add_to_favorite_list(user_id,product_id):
             "product": product.id,
             "success": True
         }
-        return jsonify(msg)
+        return jsonify(msg),200
 
 
 @app.route("/user/<int:user_id>/favorite_product/<int:product_id>")
