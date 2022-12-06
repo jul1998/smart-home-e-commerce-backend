@@ -37,6 +37,7 @@ from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, Admin
 from src.rutas import signup, login, hello_protected, logout, get_user_by_id, get_carritoCompras, change_password, signupAdmin, loginAdmin, send_email, display_settings, get_favorite_product
 
 
+
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
