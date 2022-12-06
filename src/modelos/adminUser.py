@@ -10,7 +10,7 @@ class AdminUser(db.Model):
     name = db.Column(db.String(60), unique=False, nullable=True)
     phone = db.Column(db.String(60), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-    estado = db.Column(db.String(60), nullable=False)
+
 
 
     def __repr__(self):

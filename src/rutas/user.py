@@ -67,7 +67,7 @@ def login():
     if not bcrypt.check_password_hash(user.password, password):
         raise APIException("usuario o password no coinciden", status_code=401)
 
-    access_token = create_access_token(identity=user.id) 
+    access_token = create_access_token(identity=user.id, additional_claims={"is_administrator": False}) 
     return jsonify({"token": access_token, "user_id":user.id , "email": user.email, "message": f"Welcome, {user.name.split(' ')[0]}"}), 200
 
 

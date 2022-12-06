@@ -9,7 +9,7 @@ from flask_cors import CORS
 from .utils import APIException, generate_sitemap
 from .admin import setup_admin
 from .db import db
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt, verify_jwt_in_request
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
