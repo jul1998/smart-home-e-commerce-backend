@@ -1,11 +1,27 @@
 import os
-from ..main import request, jsonify, app, bcrypt, create_access_token, get_jwt_identity, jwt_required, get_jwt
+from ..main import request, jsonify, app, bcrypt, create_access_token, get_jwt_identity, jwt_required, get_jwt, verify_jwt_in_request
 from ..db import db
 from ..modelos import AdminUser, User, BlockedList
-from flask import Flask, url_for, redirect
+from flask import Flask, url_for, redirect, abort
 from datetime import datetime, timezone, time
 import json
 from ..utils import APIException
+from functools import wraps
+
+def admin_required():
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            verify_jwt_in_request()
+            claims = get_jwt()
+            if claims["is_administrator"]:
+                return fn(*args, **kwargs)
+            else:
+                return jsonify(msg="Admins only!"), 403
+
+        return decorator
+
+    return wrapper
 
 
 @app.route('/signupAdmin', methods=['POST'])
@@ -30,7 +46,7 @@ def signupAdmin():
         password = bcrypt.generate_password_hash(
             body['password'], 12).decode("utf-8")
 
-        new_user_admin = AdminUser(email=body['email'], password=password, is_active=True, estado="Active", name=body['name'], phone=body['phone'])
+        new_user_admin = AdminUser(email=body['email'], password=password, is_active=True, name=body['name'], phone=body['phone'])
         
         user_admin = AdminUser.query.filter_by(email=body['email'])
         if not user_admin:
@@ -63,14 +79,15 @@ def loginAdmin():
     if not bcrypt.check_password_hash(user.password, password):
         raise APIException("usuario o password no coinciden", status_code=401)
 
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=user.id, additional_claims={"is_administrator": True})
     return jsonify({"token": access_token, "email": user.email}), 200
 
 
-@app.route('/helloprotected', methods=['get'])  # endpoint
+@app.route('/helloprotectedAdmin', methods=['get'])  # endpoint
 @jwt_required()  # decorador que protege al endpoint
+@admin_required()
 def hello_protectedAdmin():  # definición de la función
-    #claims = get_jwt()
+    claims = get_jwt()
     # imprimiendo la identidad del usuario que es el id
     print("id del usuario:", get_jwt_identity())
     # búsqueda del id del usuario en la BD
@@ -79,12 +96,12 @@ def hello_protectedAdmin():  # definición de la función
     # get_jwt() regresa un diccionario, y una propiedad importante es jti
     jti = get_jwt()["jti"]
 
-    #tokenBlocked = TokenBlockedList.query.filter_by(token=jti).first()
+    tokenBlocked = BlockedList.query.filter_by(token=jti).first()
     # cuando hay coincidencia tokenBloked es instancia de la clase TokenBlockedList
     # cuando No hay coincidencia tokenBlocked = None
 
-    # if isinstance(tokenBlocked, TokenBlockedList):
-    #    return jsonify(msg="Acceso Denegado")
+    if isinstance(tokenBlocked, BlockedList):
+        return jsonify(msg="Acceso Denegado")
 
     response_body = {
         "message": "token válido",
