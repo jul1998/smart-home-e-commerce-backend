@@ -179,4 +179,12 @@ def display_settings(user_id):
     return jsonify({"msg":"Personal information was changed successfuly"}), 200
 
 
-
+@app.route("/user/<int:user_id>/delete_account", methods=["GET", "DELETE"])
+def delete_account_by_id(user_id):
+    account_to_delete = User.query.get(user_id)
+    User.query.filter_by(id=user_id).delete()
+    db.session.commit()
+    if account_to_delete is None:
+        raise APIException("User to be deleted does not exist", status_code=400)
+    return jsonify({"message":f"User with email {account_to_delete.email} was deleted from data base "})
+    
