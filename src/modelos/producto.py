@@ -21,8 +21,8 @@ class Producto(db.Model):
             "id": self.id,
             "name": self.name,
             "stock": self.stock,
-            "precio": self.precio,
-            "estado": self.estado
+            "price": self.precio,
+            "status": self.estado,
         }
     
     
