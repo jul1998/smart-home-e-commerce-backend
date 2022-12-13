@@ -1,7 +1,9 @@
 from ..db import db
 import os
 
+
 class Producto(db.Model):
+    __tablename__="producto"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), unique=False, nullable=True)
     stock = db.Column(db.Integer, unique = False, nullable=False)
@@ -12,6 +14,8 @@ class Producto(db.Model):
     compras = db.relationship("Compras", backref="producto")
     reviews = db.relationship("Reviews", backref="producto")
     estado = db.Column(db.String(60), nullable = False)
+    description = db.relationship("ProductDescription", backref="producto" )
+    
 
     def __repr__(self):
         return '<Producto %r>' % self.name
@@ -22,7 +26,7 @@ class Producto(db.Model):
             "name": self.name,
             "stock": self.stock,
             "price": self.precio,
-            "status": self.estado,
+            "status": self.estado
         }
     
     
