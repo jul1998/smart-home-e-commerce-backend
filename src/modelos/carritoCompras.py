@@ -6,7 +6,6 @@ class CarritoCompras(db.Model):
     __tablename__ = "carritoCompras"
     id = db.Column(db.Integer, primary_key=True)
     idOrder = db.Column(db.Integer, nullable = False) 
-    
     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     productId = db.Column(db.Integer, db.ForeignKey('producto.id'))
     cantidad = db.Column(db.Integer, nullable = False)
@@ -22,6 +21,6 @@ class CarritoCompras(db.Model):
             "userId": self.userId,
             "productId": self.productId,
             "cantidad": self.cantidad,
-            "costoUnitario": Producto.query.get(self.productId).serialize()['precio'],
+            "price": Producto.query.get(self.productId).serialize()['price'],
             "name": Producto.query.get(self.productId).serialize()['name']
         }

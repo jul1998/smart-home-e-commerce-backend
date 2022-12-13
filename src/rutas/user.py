@@ -123,13 +123,13 @@ def get_user_by_id(user_id):
     return jsonify(user.serialize()), 200
 
 @app.route('/user/<int:user_id>/carritoCompras', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_carritoCompras(user_id):
-    carrito_productos = CarritoCompras.query.all()
+    carrito_productos = CarritoCompras.query.filter_by(userId=user_id).all()
+    print("soy el carrito de compras",carrito_productos)
     carrito_productos = list(map( lambda carrito_producto: carrito_producto.serialize(), carrito_productos))
-    carrito_completo = carrito_productos
-    print(carrito_completo)
-    return jsonify(carrito_completo), 200
+    print(carrito_productos)
+    return jsonify(carrito_productos), 200
 
 @app.route("/user/<int:user_id>/change_password", methods=["GET","PUT"])
 @jwt_required()
