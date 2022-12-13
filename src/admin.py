@@ -24,4 +24,5 @@ def setup_admin(app):
     admin.add_view(ModelView(PreguntasProductos, db.session))
     admin.add_view(ModelView(AdminUser, db.session))
     admin.add_view(ModelView(BlockedList, db.session))
+    admin.add_view(ModelView(CarritoCompras, db.session))
 
