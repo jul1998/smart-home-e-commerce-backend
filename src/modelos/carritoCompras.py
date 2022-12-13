@@ -1,5 +1,6 @@
 from ..db import db
 import os
+from ..modelos import Producto
 
 class CarritoCompras(db.Model):
     __tablename__ = "carritoCompras"
@@ -11,7 +12,7 @@ class CarritoCompras(db.Model):
     #costoUnitario = db.Column(db.Numeric(precision=10, scale=2), db.ForeignKey('producto.precio'))
     
     def __repr__(self):
-        return '<CarritoCompras %r>' % self.name
+        return '<CarritoCompras %r>' % self.idOrder
 
     def serialize(self):
         return {
@@ -20,5 +21,6 @@ class CarritoCompras(db.Model):
             "userId": self.userId,
             "productId": self.productId,
             "cantidad": self.cantidad,
-            "costoUnitario": Producto.query.get(self.productId).serialize()['precio']
+            "price": Producto.query.get(self.productId).serialize()['price'],
+            "name": Producto.query.get(self.productId).serialize()['name']
         }

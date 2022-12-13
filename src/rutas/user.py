@@ -1,7 +1,7 @@
 import os
 from ..main import request, jsonify, app, bcrypt, create_access_token, get_jwt_identity, jwt_required, get_jwt
 from ..db import db
-from ..modelos import User, BlockedList
+from ..modelos import User, BlockedList, CarritoCompras, Producto
 from flask import Flask, url_for, redirect
 from datetime import datetime, timezone, time
 import json
@@ -122,14 +122,14 @@ def get_user_by_id(user_id):
     # print(user.serialize())
     return jsonify(user.serialize()), 200
 
-@app.route('/user/carritoCompras', methods=['GET'])
+@app.route('/user/<int:user_id>/carritoCompras', methods=['GET'])
 @jwt_required()
-def get_carritoCompras():
-    carrito_producto = CarritoCompras.query.all()
-    carrito_producto = list(map( lambda carrito_producto: carrito_producto.serialize(), carrito_productos))
-    carrito_completo = carrito_producto
-    print(carrito_completo)
-    return jsonify(carrito_completo), 200
+def get_carritoCompras(user_id):
+    carrito_productos = CarritoCompras.query.filter_by(userId=user_id).all()
+    print("soy el carrito de compras",carrito_productos)
+    carrito_productos = list(map( lambda carrito_producto: carrito_producto.serialize(), carrito_productos))
+    print(carrito_productos)
+    return jsonify(carrito_productos), 200
 
 @app.route("/user/<int:user_id>/change_password", methods=["GET","PUT"])
 @jwt_required()
