@@ -1,7 +1,7 @@
 import os
 from ..main import request, jsonify, app, bcrypt, create_access_token, get_jwt_identity, jwt_required, get_jwt
 from ..db import db
-from ..modelos import Producto, User, FavoritoProductos
+from ..modelos import Producto, User, FavoritoProductos, Reviews
 from flask import Flask, url_for
 from datetime import datetime, timezone, time
 import json
@@ -89,3 +89,10 @@ def add_to_favorite_list(user_id,product_id):
 @app.route("/user/<int:user_id>/favorite_product/<int:product_id>")
 def get_favorite_product(user_id, product_id):
     pass
+
+@app.route("/product/<int:product_id>/product_info")
+def get_product_info_by_id(product_id):
+    product = Producto.query.get(product_id)
+    #product_reviews = Reviews.query.get(product_id).serialize()
+    print(product)
+    return jsonify(product.serialize())

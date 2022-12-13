@@ -11,7 +11,7 @@ class Reviews(db.Model):
     estado = db.Column(db.String(60), nullable=False)
 
     def __repr__(self):
-        return '<Reviews %r>' % self.email
+        return '<Reviews %r>' % self.productId
 
     def serialize(self):
         return {
