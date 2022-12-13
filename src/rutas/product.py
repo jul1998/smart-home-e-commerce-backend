@@ -1,7 +1,7 @@
 import os
 from ..main import request, jsonify, app, bcrypt, create_access_token, get_jwt_identity, jwt_required, get_jwt
 from ..db import db
-from ..modelos import Producto, User, FavoritoProductos, Reviews
+from ..modelos import Producto, User, FavoritoProductos, Reviews, ProductDescription
 from flask import Flask, url_for
 from datetime import datetime, timezone, time
 import json
@@ -34,7 +34,8 @@ def create_product():
         new_product = Producto(name=product_name,
                     stock=product_stock,
                     precio=product_precio,
-                    estado=product_estado
+                    estado=product_estado,
+
         )
         db.session.add(new_product)
     except Exception:
@@ -94,5 +95,21 @@ def get_favorite_product(user_id, product_id):
 def get_product_info_by_id(product_id):
     product = Producto.query.get(product_id)
     #product_reviews = Reviews.query.get(product_id).serialize()
-    print(product)
+    description = ProductDescription.query.get(product_id).serialize()["description"]
+    print(description)
     return jsonify(product.serialize())
+
+@app.route("/product/<int:product_id>/add_description", methods=["GET", "POST"])
+def add_product_description(product_id):
+    body = request.get_json()
+    product_description_request = body["description"]
+    product = Producto.query.filter_by(id=product_id).first()
+    print(product.id)
+    if body == None or product_description_request == "":
+        raise APIException("Body cannot be empty")
+
+    new_description = ProductDescription(description=product_description_request, product_id=product.id)
+    db.session.add(new_description)
+    db.session.commit()
+
+    return jsonify({"msg":"Description added"}),200
