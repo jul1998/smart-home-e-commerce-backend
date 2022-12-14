@@ -10,11 +10,13 @@ from ..utils import APIException
 @app.route("/producto", methods=["POST"])
 #@jwt_required()
 def create_product():
+    product_img = None
     body = request.get_json() 
     product_name = body["name"]
     product_stock = body["stock"]
     product_precio = body["precio"]
     product_estado = body["estado"]
+ 
 
 
     if body is None:
@@ -27,6 +29,8 @@ def create_product():
          raise APIException("Product price cannot be empty nor text")
     if product_estado == "":
          raise APIException("Product estado cannot be empty")
+    if body["img"] != "" or body["img"] is None:
+        product_img = body["img"]
 
     #Si todo lo de arriba se cumple, se pasa a la siguiente parte de verificacion usando un try-excep-else block
 
@@ -35,6 +39,7 @@ def create_product():
                     stock=product_stock,
                     precio=product_precio,
                     estado=product_estado,
+                    img_product = product_img
 
         )
         db.session.add(new_product)
@@ -94,21 +99,27 @@ def get_favorite_product(user_id, product_id):
 def get_product_info_by_id(product_id):
     product = Producto.query.get(product_id)
     #product_reviews = Reviews.query.get(product_id).serialize()
-    description = ProductDescription.query.get(product_id).serialize()["description"]
-    print(description)
+    
     return jsonify(product.serialize())
 
 @app.route("/product/<int:product_id>/add_description", methods=["GET", "POST"])
 def add_product_description(product_id):
-    body = request.get_json()
-    product_description_request = body["description"]
-    product = Producto.query.filter_by(id=product_id).first()
-    print(product.id)
-    if body == None or product_description_request == "":
-        raise APIException("Body cannot be empty")
+    if request.method == "POST":
+        body = request.get_json()
+        product_description_request = body["description"]
+        product = Producto.query.filter_by(id=product_id).first()
+        if body == None or product_description_request == "":
+            raise APIException("Body cannot be empty")
+        
+        
+        new_description = ProductDescription(description=product_description_request, product_id=product.id)
+        db.session.add(new_description)
+        db.session.commit()
+        return jsonify({"msg":"Description added"}),200
+    else:
+        #description = ProductDescription.query.get(product_id).serialize()["description"]
+        all_descriptions = ProductDescription.query.filter_by(product_id=product_id).all()
 
-    new_description = ProductDescription(description=product_description_request, product_id=product.id)
-    db.session.add(new_description)
-    db.session.commit()
-
-    return jsonify({"msg":"Description added"}),200
+        all_descriptions_serilized = list(map(lambda description: description.serialize(), all_descriptions))
+        print(all_descriptions_serilized)
+        return jsonify(all_descriptions_serilized),200

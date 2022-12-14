@@ -8,6 +8,7 @@ class Producto(db.Model):
     name = db.Column(db.String(150), unique=False, nullable=True)
     stock = db.Column(db.Integer, unique = False, nullable=False)
     precio = db.Column(db.Numeric(precision=10, scale=2), unique=False)
+    img_product = db.Column(db.Text(), unique= False, nullable=True)
     #parent_id = db.Column(db.Integer, db.Foreignkey('user.id'))
     favorite_product = db.relationship("FavoritoProductos", backref="producto") #favorite_product works as a list that contains all favorite products in child table FavoritoProductos
     carritoCompras = db.relationship("CarritoCompras", backref="producto")
@@ -26,7 +27,8 @@ class Producto(db.Model):
             "name": self.name,
             "stock": self.stock,
             "price": self.precio,
-            "status": self.estado
+            "status": self.estado,
+            "img": self.img_product
         }
     
     
