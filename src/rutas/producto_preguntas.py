@@ -13,8 +13,10 @@ def post_product_question(product_id, user_id):
     """Ruta para postear preguntas con base en el method"""
     body = request.get_json()
     now = datetime.now(timezone.utc)
-
     
+    user = User.query.filter_by(id=user_id).first() #Obtener el user id de url
+    product = Producto.query.filter_by(id=product_id).first() #Obtener el product id de url
+    print(now)
     ask_by_userid_body = user_id
     productId_body = product_id
     descripcion_body = body["description"]
@@ -22,11 +24,11 @@ def post_product_question(product_id, user_id):
     estado_body = "Pending"
 
     if descripcion_body == "" or len(descripcion_body) == 0:
-        return APIException("Description is empty", status_code=400)
+        return APIException("Question is empty", status_code=400)
 
 
-    new_question = PreguntasProductos(ask_by_userid=ask_by_userid_body, 
-    productId=productId_body,
+    new_question = PreguntasProductos(ask_by_userid=user.id, 
+    productId=product.id,
     descripcion=descripcion_body, 
     posted_at=now,estado=estado_body)
 
@@ -42,6 +44,7 @@ def get_questions(product_id):
     question_query = PreguntasProductos.query.filter_by(productId=product_id).all() #Obtener todas las preguntas de un producto por id
     #questions = PreguntasProductos.query.all()
     questions_json = list(map(lambda question: question.serialize(),question_query))#Map over questions in product
+    print(questions_json)
     return jsonify(questions_json)
 
 @app.route("/preguntasAdmin") #route para ver todas las preguntas hechas y poder responderlas.
@@ -50,3 +53,12 @@ def get_allquestions():
     questions = PreguntasProductos.queryAll()
     questions_json = list(map(lambda question: question.serialize(),questions))
     return jsonify(questions_json)
+
+@app.route("/delete_question/question/<int:question_id>", methods=["DELETE"])
+def delete_question_by_id(question_id):
+    question_to_delete = PreguntasProductos.query.get(question_id)
+    print(question_to_delete)
+    db.session.delete(question_to_delete)
+    db.session.commit()
+
+    return jsonify("Book was deleted"), 200

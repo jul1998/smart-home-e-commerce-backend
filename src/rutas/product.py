@@ -63,7 +63,7 @@ def add_to_favorite_list(user_id,product_id):
     """Ruta para obtener lista de productos favoritos """
     user = User.query.filter_by(id=user_id).first() #Obtener el user id de url
     product = Producto.query.filter_by(id=product_id).first() #Obtener el product id de url
-    print(user.id, product.id)
+    print(user.name, product.id)
 
     #favorite = FavoritoProductos.query.filter_by(userId=user_id).first()
     #print(favorite.product.precio)
