@@ -16,7 +16,7 @@ def post_product_question(product_id, user_id):
     
     user = User.query.filter_by(id=user_id).first() #Obtener el user id de url
     product = Producto.query.filter_by(id=product_id).first() #Obtener el product id de url
-    print(user)
+    print(now)
     ask_by_userid_body = user_id
     productId_body = product_id
     descripcion_body = body["description"]
@@ -24,7 +24,7 @@ def post_product_question(product_id, user_id):
     estado_body = "Pending"
 
     if descripcion_body == "" or len(descripcion_body) == 0:
-        return APIException("Description is empty", status_code=400)
+        return APIException("Question is empty", status_code=400)
 
 
     new_question = PreguntasProductos(ask_by_userid=user.id, 
@@ -53,3 +53,12 @@ def get_allquestions():
     questions = PreguntasProductos.queryAll()
     questions_json = list(map(lambda question: question.serialize(),questions))
     return jsonify(questions_json)
+
+@app.route("/delete_question/question/<int:question_id>", methods=["DELETE"])
+def delete_question_by_id(question_id):
+    question_to_delete = PreguntasProductos.query.get(question_id)
+    print(question_to_delete)
+    db.session.delete(question_to_delete)
+    db.session.commit()
+
+    return jsonify("Book was deleted"), 200
