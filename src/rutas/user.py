@@ -131,6 +131,27 @@ def get_carritoCompras(user_id):
     print(carrito_productos)
     return jsonify(carrito_productos), 200
 
+@app.route('/user/<int:user_id>/añadirCarritoCompras', methods=['GET'])
+@jwt_required()
+def get_carritoCompras(user_id):
+    carrito_productos = CarritoCompras.query.filter_by(userId=user_id).all()
+    try:
+        new_carrito = CarritoCompras(userId=user_id, estado="Active", name=body['name'], img_profile=None, phone=body['phone'], address=body['address'])
+
+        print(new_user)
+        # print(new_user.serialize())
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({"msg":"Usuario creado exitosamente"}), 200
+
+    except Exception as err:
+        db.session.rollback()
+        user = User.query.filter_by(email=body['email'])
+        if user:
+            raise APIException("El usuario ya existe", status_code=400)
+        print(err)
+        raise APIException({"Error al registrar usuario"}, status_code=400)
+
 @app.route("/user/<int:user_id>/change_password", methods=["GET","PUT"])
 @jwt_required()
 def change_password(user_id):
