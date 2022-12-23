@@ -70,6 +70,8 @@ def login():
     access_token = create_access_token(identity=user.id, additional_claims={"is_administrator": False}) 
     return jsonify({"token": access_token, "user_id":user.id , "email": user.email, "message": f"Welcome, {user.name.split(' ')[0]}"}), 200
 
+@app.route('/payment', methods=['POST'])
+
 
 @app.route('/helloprotected', methods=['get'])  # endpoint
 @jwt_required()  # decorador que protege al endpoint
@@ -197,6 +199,7 @@ def display_settings(user_id):
     user_to_update.img_profile = body["img"]
     db.session.commit()
 
+
     return jsonify({"msg":"Personal information was changed successfuly"}), 200
 
 
@@ -208,4 +211,4 @@ def delete_account_by_id(user_id):
     if account_to_delete is None:
         raise APIException("User to be deleted does not exist", status_code=400)
     return jsonify({"message":f"User with email {account_to_delete.email} was deleted from data base "})
-    
+
