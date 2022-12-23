@@ -124,7 +124,7 @@ def get_user_by_id(user_id):
 
 @app.route('/user/<int:user_id>/carritoCompras', methods=['GET'])
 @jwt_required()
-def get_carritoCompras(user_id):
+def get_carritoCompras_2(user_id):
     carrito_productos = CarritoCompras.query.filter_by(userId=user_id).all()
     print("soy el carrito de compras",carrito_productos)
     carrito_productos = list(map( lambda carrito_producto: carrito_producto.serialize(), carrito_productos))
