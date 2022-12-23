@@ -9,4 +9,5 @@ from .preguntasProductos import PreguntasProductos
 from .reviews import Reviews
 from .problemas import Problemas
 from .adminUser import AdminUser
-
+from .product_description import ProductDescription
+from .paypalToken import PaypalToken
