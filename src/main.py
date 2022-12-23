@@ -9,7 +9,7 @@ from flask_cors import CORS
 from .utils import APIException, generate_sitemap
 from .admin import setup_admin
 from .db import db
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt, verify_jwt_in_request
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
@@ -31,10 +31,11 @@ CORS(app)
 setup_admin(app)
 
 #####  Importar Modelos  ####
-from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, AdminUser, Compras, Reviews, Problemas, PreguntasProductos, BlockedList 
+from src.modelos import User, Producto, FavoritoProductos, CarritoCompras, AdminUser, Compras, Reviews, Problemas, PreguntasProductos, BlockedList, ProductDescription
 
 ##### Importar las Rutas ####
-from src.rutas import signup, login, hello_protected, logout, get_user_by_id, get_carritoCompras, change_password, signupAdmin, loginAdmin, send_email, display_settings
+from src.rutas import signup, login, hello_protected, logout, get_user_by_id, get_carritoCompras, change_password, signupAdmin, loginAdmin, send_email, display_settings, get_favorite_product, delete_account_by_id, get_product_info_by_id, add_product_description, delete_question_by_id, get_carritoCompras_2
+
 
 
 # Handle/serialize errors like a JSON object

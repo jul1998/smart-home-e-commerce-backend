@@ -7,8 +7,8 @@ class Compras(db.Model):
     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     productId = db.Column(db.Integer, db.ForeignKey('producto.id'))
     costo = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
-    trackId = db.Column(db.String(250), unique=True)
-    estadoEnvio = db.Column(db.String(60), nullable=False)
+    payId = db.Column(db.String(250), unique=True)
+    estadoEnvio = db.Column(db.String(60), nullable=True)
     problemas = db.relationship("Problemas", backref="compras")
 
     
@@ -22,6 +22,6 @@ class Compras(db.Model):
             "costo": self.name,
             "userId": self.userId,
             "productId": self.productId,
-            "trackId": self.trackId,
+            "payId": self.payId,
             "estadoEnvio": self.estadoEnvio
         }

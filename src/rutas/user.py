@@ -1,7 +1,7 @@
 import os
 from ..main import request, jsonify, app, bcrypt, create_access_token, get_jwt_identity, jwt_required, get_jwt
 from ..db import db
-from ..modelos import User, BlockedList
+from ..modelos import User, BlockedList, CarritoCompras, Producto
 from flask import Flask, url_for, redirect
 from datetime import datetime, timezone, time
 import json
@@ -67,8 +67,8 @@ def login():
     if not bcrypt.check_password_hash(user.password, password):
         raise APIException("usuario o password no coinciden", status_code=401)
 
-    access_token = create_access_token(identity=user.id) 
-    return jsonify({"token": access_token, "email": user.email, "message": f"Welcome, {user.name.split(' ')[0]}"}), 200
+    access_token = create_access_token(identity=user.id, additional_claims={"is_administrator": False}) 
+    return jsonify({"token": access_token, "user_id":user.id , "email": user.email, "message": f"Welcome, {user.name.split(' ')[0]}"}), 200
 
 @app.route('/payment', methods=['POST'])
 
@@ -124,14 +124,35 @@ def get_user_by_id(user_id):
     # print(user.serialize())
     return jsonify(user.serialize()), 200
 
-@app.route('/user/carritoCompras', methods=['GET'])
-#@jwt_required()
-def get_carritoCompras():
-    carrito_producto = CarritoCompras.query.all()
-    carrito_producto = list(map( lambda carrito_producto: carrito_producto.serialize(), carrito_productos))
-    carrito_completo = carrito_producto
-    print(carrito_completo)
-    return jsonify(carrito_completo), 200
+@app.route('/user/<int:user_id>/carritoCompras', methods=['GET'])
+@jwt_required()
+def get_carritoCompras_2(user_id):
+    carrito_productos = CarritoCompras.query.filter_by(userId=user_id).all()
+    print("soy el carrito de compras",carrito_productos)
+    carrito_productos = list(map( lambda carrito_producto: carrito_producto.serialize(), carrito_productos))
+    print(carrito_productos)
+    return jsonify(carrito_productos), 200
+
+@app.route('/user/<int:user_id>/añadirCarritoCompras', methods=['GET'])
+@jwt_required()
+def get_carritoCompras(user_id):
+    carrito_productos = CarritoCompras.query.filter_by(userId=user_id).all()
+    try:
+        new_carrito = CarritoCompras(userId=user_id, estado="Active", name=body['name'], img_profile=None, phone=body['phone'], address=body['address'])
+
+        print(new_user)
+        # print(new_user.serialize())
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({"msg":"Usuario creado exitosamente"}), 200
+
+    except Exception as err:
+        db.session.rollback()
+        user = User.query.filter_by(email=body['email'])
+        if user:
+            raise APIException("El usuario ya existe", status_code=400)
+        print(err)
+        raise APIException({"Error al registrar usuario"}, status_code=400)
 
 @app.route("/user/<int:user_id>/change_password", methods=["GET","PUT"])
 @jwt_required()
@@ -139,6 +160,7 @@ def change_password(user_id):
     """Ruta para cambiar password"""
     body = request.get_json()
     password_request = body["password"]
+    print(password_request)
     if request.method == "PUT":
         hash_password = bcrypt.generate_password_hash(
                 password_request, 10).decode("utf-8") #Crear nueva password encriptada
@@ -146,7 +168,8 @@ def change_password(user_id):
         password_to_change = User.query.filter_by(id=user_id).first() #Obtener usuario por user_id en url
         password_to_change.password = hash_password # Cambiar actual password
         db.session.commit() #Commit cambios
-        return redirect (url_for("logout"))# Redireccionar a ruta de logout para agregar token a blocked list
+        return jsonify("Password changed")
+        #return redirect (url_for("logout"))# Redireccionar a ruta de logout para agregar token a blocked list
     return jsonify("None")
 
 
@@ -176,4 +199,16 @@ def display_settings(user_id):
     user_to_update.img_profile = body["img"]
     db.session.commit()
 
-    return jsonify("Settings were changed successfuly"), 200
+
+    return jsonify({"msg":"Personal information was changed successfuly"}), 200
+
+
+@app.route("/user/<int:user_id>/delete_account", methods=["GET", "DELETE"])
+def delete_account_by_id(user_id):
+    account_to_delete = User.query.get(user_id)
+    User.query.filter_by(id=user_id).delete()
+    db.session.commit()
+    if account_to_delete is None:
+        raise APIException("User to be deleted does not exist", status_code=400)
+    return jsonify({"message":f"User with email {account_to_delete.email} was deleted from data base "})
+
