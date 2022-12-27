@@ -9,6 +9,7 @@ from ..utils import APIException
 
 
 @app.route("/user/<int:user_id>/product/<int:product_id>/quantity/<int:quantity>/add_shopping_cart", methods=["GET", "POST"])
+@jwt_required()
 def add_item_to_shopping_cart(user_id, product_id, quantity):
    
     user = User.query.filter_by(id=user_id).first() #Obtener el user id de url
@@ -21,10 +22,10 @@ def add_item_to_shopping_cart(user_id, product_id, quantity):
     return jsonify("Hello")
 
 @app.route("/user/<int:user_id>/view_cart")
+@jwt_required()
 def display_shopping_cart_by_user_id(user_id):
     product_in_shopping_cart = ShoppingCart.query.filter_by(user_id=user_id).all()
     product_in_shopping_cart_serialized = list(map(lambda product: product.serialize(),product_in_shopping_cart))
 
-    print(product_in_shopping_cart_serialized)
 
     return jsonify(product_in_shopping_cart_serialized)
