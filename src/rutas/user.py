@@ -1,7 +1,7 @@
 import os
 from ..main import request, jsonify, app, bcrypt, create_access_token, get_jwt_identity, jwt_required, get_jwt
 from ..db import db
-from ..modelos import User, BlockedList, CarritoCompras, Producto
+from ..modelos import User, BlockedList, ShoppingCart, Producto
 from flask import Flask, url_for, redirect
 from datetime import datetime, timezone, time
 import json
