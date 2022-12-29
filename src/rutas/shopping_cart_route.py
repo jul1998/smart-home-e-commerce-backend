@@ -14,6 +14,10 @@ def add_item_to_shopping_cart(user_id, product_id, quantity):
    
     user = User.query.filter_by(id=user_id).first() #Obtener el user id de url
     product = Producto.query.filter_by(id=product_id).first() #Obtener el product id de url
+
+        
+    if ShoppingCart.query.filter_by(productId=product_id).first():
+        raise APIException("Product was already added to shopping cart", status_code=403)
     
     try:
         product_to_add_shopping_cart = ShoppingCart(user_id=user.id, productId=product.id,product_price=product.precio, product_quantity=quantity)
@@ -39,6 +43,8 @@ def detelete_product_shopping_cart(product_id,user_id):
 
     if not ShoppingCart.query.filter_by(productId=product_id).first():
         raise APIException("Product does not exist in shopping cart from user")
+    
+
         
     ShoppingCart.query.filter_by(productId=product_id).delete()
     db.session.commit()
