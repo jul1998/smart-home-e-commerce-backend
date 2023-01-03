@@ -1,7 +1,7 @@
 from .user import User
 from .producto import Producto
 from .favoritoProductos import FavoritoProductos
-from .carritoCompras import ShoppingCart
+from .carritoCompras import ShoppingCart, ShoppingCartItem
 from .adminUser import AdminUser
 from .blocked_tokens import BlockedList
 from .compras import Compras
