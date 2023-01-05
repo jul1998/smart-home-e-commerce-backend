@@ -34,7 +34,7 @@ setup_admin(app)
 from src.modelos import User, Producto, FavoritoProductos, ShoppingCart, AdminUser, Compras, Reviews, Problemas, PreguntasProductos, BlockedList, ProductDescription, ShoppingCartItem
 
 ##### Importar las Rutas ####
-from src.rutas import signup, login, hello_protected, logout, get_user_by_id, get_carritoCompras, change_password, signupAdmin, loginAdmin, send_email, display_settings, get_favorite_product, delete_account_by_id, get_product_info_by_id, add_product_description, delete_question_by_id, get_carritoCompras_2, add_item_to_shopping_cart, detelete_product_shopping_cart, display_shopping_cart_by_user_id, detelete_all_products_shopping_cart, display_specific_product_in_cart
+from src.rutas import signup, login, hello_protected, logout, get_user_by_id, get_carritoCompras, change_password, signupAdmin, loginAdmin, send_email, display_settings, get_favorite_product, delete_account_by_id, get_product_info_by_id, add_product_description, delete_question_by_id, get_carritoCompras_2, add_item_to_shopping_cart, detelete_product_shopping_cart, display_shopping_cart_by_user_id, detelete_all_products_shopping_cart, display_specific_product_in_cart, modify_quantity_in_shopping_cart
 
 
 

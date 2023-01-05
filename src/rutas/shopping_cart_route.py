@@ -115,3 +115,25 @@ def detelete_all_products_shopping_cart(user_id):
         db.session.rollback()
         raise APIException("Something went wrong when adding product to shopping cart", status_code=400)
 
+
+@app.route("/user/<int:user_id>/modify_quantity/shopping_cart", methods=["PATCH"])
+def modify_quantity_in_shopping_cart(user_id):
+    body = request.get_json()
+    product_id = body["product_id"]
+    quantity = body["quantity"]
+
+    if product_id == "" or product_id is None:
+        raise APIException("Product ID cannot be empty", status_code=400)
+    if quantity == "" or quantity is None:
+        raise APIException("Please, specify a quantity for this product", status_code=400)
+    
+    cart_entry = ShoppingCart.query.filter_by(user_id=user_id).first() 
+    cart_item =  ShoppingCartItem.query.filter_by(shopping_cart_id=cart_entry.id, productId=product_id).first() #Filters by user 
+    #and product id since an user can have mutiple products in the shopping cart
+    try:
+        cart_item.product_quantity = quantity
+        db.session.commit()
+        return jsonify({"message":"Product quantity was modified"}), 200
+    except:
+        db.session.rollback()
+        raise APIException("Something went wrong when modifying quanitity in product", status_code=400)
