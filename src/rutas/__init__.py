@@ -4,5 +4,5 @@ from .historial_compras import get_order_history
 from .producto_preguntas import post_product_question, get_questions, delete_question_by_id
 from .userAdmin import signupAdmin, loginAdmin
 from .email_server import send_email
-from .shopping_cart_route import add_item_to_shopping_cart, detelete_product_shopping_cart, display_shopping_cart_by_user_id, detelete_all_products_shopping_cart, display_specific_product_in_cart
+from .shopping_cart_route import add_item_to_shopping_cart, detelete_product_shopping_cart, display_shopping_cart_by_user_id, detelete_all_products_shopping_cart, display_specific_product_in_cart, modify_quantity_in_shopping_cart
   
