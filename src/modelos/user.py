@@ -19,6 +19,7 @@ class User(db.Model):
     problemas = db.relationship("Problemas", backref="user")
     reviews = db.relationship("Reviews", backref="user")
     estado = db.Column(db.String(60), nullable=False)
+    product_comments = db.relationship("Comments", back_populates="author")
     
 
 

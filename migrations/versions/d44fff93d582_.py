@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 82afe600346b
+Revision ID: d44fff93d582
 Revises: 
-Create Date: 2023-01-03 04:15:14.763324
+Create Date: 2023-01-10 02:42:11.678750
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '82afe600346b'
+revision = 'd44fff93d582'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -57,6 +57,16 @@ def upgrade():
     sa.Column('estado', sa.String(length=60), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
+    )
+    op.create_table('comments',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('posted_by_userid', sa.Integer(), nullable=True),
+    sa.Column('productId', sa.Integer(), nullable=True),
+    sa.Column('posted_at', sa.DateTime(), nullable=False),
+    sa.Column('comment', sa.Text(), nullable=False),
+    sa.ForeignKeyConstraint(['posted_by_userid'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['productId'], ['producto.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('compras',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -147,6 +157,7 @@ def downgrade():
     op.drop_table('preguntasproductos')
     op.drop_table('favoritoProductos')
     op.drop_table('compras')
+    op.drop_table('comments')
     op.drop_table('user')
     op.drop_table('producto')
     op.drop_table('blocked_list')
