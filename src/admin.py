@@ -4,7 +4,7 @@ from .db import db
 
 
 ### Importar los modelos #####
-from src.modelos import User, Producto, FavoritoProductos, ShoppingCart, AdminUser, Compras, Reviews, Problemas, PreguntasProductos, BlockedList, ProductDescription, ShoppingCartItem, Comments
+from src.modelos import User, Producto, FavoritoProductos, ShoppingCart, AdminUser, Compras, Reviews, Problemas, PreguntasProductos, BlockedList, ProductDescription, ShoppingCartItem, Comments, Ticket
 
 
 
@@ -28,4 +28,6 @@ def setup_admin(app):
     admin.add_view(ModelView(ShoppingCart, db.session))
     admin.add_view(ModelView(ShoppingCartItem, db.session))
     admin.add_view(ModelView(Comments, db.session))
+    admin.add_view(ModelView(Ticket, db.session))
+
 

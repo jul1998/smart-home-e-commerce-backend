@@ -11,4 +11,4 @@ from .problemas import Problemas
 from .adminUser import AdminUser
 from .product_description import ProductDescription
 from .comments import Comments
-
+from .user_tickets import Ticket
