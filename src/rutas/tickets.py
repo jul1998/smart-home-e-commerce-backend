@@ -13,12 +13,13 @@ def create_ticket():
     body = request.get_json()
     user_id = body["user_id"]
     description = body["description"]
+    now = datetime.now(timezone.utc)
 
     if description is None or description=="":
         raise APIException("Tickets cannot be empty" ,status_code=400)
 
     try:
-        new_ticket = Ticket(user_id=user_id, description=description)
+        new_ticket = Ticket(user_id=user_id, description=description, posted_at=now)
         db.session.add(new_ticket)
         db.session.commit()
         return jsonify({"message": "Ticket was created"})
@@ -28,6 +29,7 @@ def create_ticket():
 
     
 @app.route("/user/<int:user_id>/display_ticket_information")
+@jwt_required()
 def display_ticket_info_by_user(user_id):
 
     all_tickets = Ticket.query.filter_by(user_id=user_id).all()

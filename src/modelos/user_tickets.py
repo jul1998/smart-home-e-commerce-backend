@@ -7,11 +7,14 @@ class Ticket(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship("User", back_populates="tickets")
     description = db.Column(db.Text)
+    posted_at = db.Column(db.DateTime, nullable=False)
+
 
     def serialize(self):
         return ({
             "id": self.id,
             "user_id": self.user_id,
             "user_email": self.user.email,
-            "description": self.description, 
+            "description": self.description,
+            "date": self.posted_at 
         })
